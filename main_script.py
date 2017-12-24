@@ -11,11 +11,11 @@ import datetime
 import json
 
 current_directory=str(os.getcwd())
-requests_df=pd.read_csv(current_directory+"\\requests.csv")
+requests_df=pd.read_csv(current_directory+"\\test_requests.csv")
 print("requests dataframe is: \n")
 print(requests_df.head(10))
 
-vlans_df=pd.read_csv(current_directory+"\\vlans.csv")
+vlans_df=pd.read_csv(current_directory+"\\test_vlans.csv")
 vlans_df_primary_port=vlans_df.loc[vlans_df['primary_port'] == 1]
 vlans_df_non_primary_port=vlans_df.loc[vlans_df['primary_port'] == 0]
 print("vlans dataframe primary port is: \n")
@@ -35,31 +35,14 @@ print("\n the length of the original dataframe is: "+str(len(requests_df)))
 
 
 vlans_df_primary_port = vlans_df_primary_port.reset_index(drop=True)
+vlans_df_primary_port_used = vlans_df_primary_port
 vlans_df_non_primary_port = vlans_df_non_primary_port.reset_index(drop=True)
 #vlans_df_primary_port.to_csv("vlans_df_primary_port.csv")
 
 json_non_redundant_df=json.loads(non_redundant_df.to_json(orient='records'))
 json_redundant_df=json.loads(redundant_df.to_json(orient='records'))
 #for i in range(0,10):
-for i in range(0,len(json_non_redundant_df)):
-    #print(json_non_redundant_df[i])
-    min_vlans_df = vlans_df_primary_port[vlans_df_primary_port['vlan_id'] == min(vlans_df_primary_port['vlan_id'])]
-    #print(min_vlans_df)
-    min_vlans_device_df = min_vlans_df[min_vlans_df['device_id'] == min(min_vlans_df['device_id'])]
-    json_non_redundant_df[i]['device_id']=min_vlans_device_df.iloc[0]['device_id']
-    json_non_redundant_df[i]['vlan_id']=min_vlans_device_df.iloc[0]['vlan_id']
-    json_non_redundant_df[i]['primary_port']=min_vlans_device_df.iloc[0]['primary_port']
-    #print(len(vlans_df_primary_port))
-    #print('row you are deleting is:')
-    #print(vlans_df_primary_port.iloc[min_vlans_device_df.index[0]])
-    #print('index you are deleting is:')
-    #print(min_vlans_device_df.index[0])
-    vlans_df_primary_port=vlans_df_primary_port.drop(vlans_df_primary_port.index[min_vlans_device_df.index[0]])
-    vlans_df_primary_port = vlans_df_primary_port.reset_index(drop=True)
-    #print(len(vlans_df_primary_port))
-    del min_vlans_df
-    del min_vlans_device_df
-    print(json_non_redundant_df[i])
+
 
 json_2x_empty_df=[]
 
@@ -105,13 +88,37 @@ for i in range(0,len(json_redundant_df),1):
     #print(min_vlans_device_df.index[0])
     vlans_df_primary_port=vlans_df_primary_port.drop(vlans_df_primary_port.index[min_vlans_device_df.index[0]])
     vlans_df_primary_port = vlans_df_primary_port.reset_index(drop=True)
+    vlans_df_primary_port_used=vlans_df_primary_port_used.drop(vlans_df_primary_port_used.index[min_vlans_device_df.index[0]])
+    vlans_df_primary_port_used = vlans_df_primary_port_used.reset_index(drop=True)
     #print(len(vlans_df_primary_port))
     del min_vlans_df
     del min_vlans_device_df
     if i < len(json_redundant_df):
         print(json_2x_empty_df[i])
         print(json_2x_empty_df[i+1])
-        print("length of the primary port df is:"+str(len(vlans_df_primary_port)))
+        print("length of the primary port df used is:"+str(len(vlans_df_primary_port_used)))
+ 
+#vlans_df_primary_port_used = vlans_df_primary_port_used.reset_index(drop=True)
+       
+for i in range(0,len(json_non_redundant_df)):
+    #print(json_non_redundant_df[i])
+    min_vlans_df = vlans_df_primary_port_used[vlans_df_primary_port_used['vlan_id'] == min(vlans_df_primary_port_used['vlan_id'])]
+    #print(min_vlans_df)
+    min_vlans_device_df = min_vlans_df[min_vlans_df['device_id'] == min(min_vlans_df['device_id'])]
+    json_non_redundant_df[i]['device_id']=min_vlans_device_df.iloc[0]['device_id']
+    json_non_redundant_df[i]['vlan_id']=min_vlans_device_df.iloc[0]['vlan_id']
+    json_non_redundant_df[i]['primary_port']=min_vlans_device_df.iloc[0]['primary_port']
+    #print(len(vlans_df_primary_port))
+    #print('row you are deleting is:')
+    #print(vlans_df_primary_port.iloc[min_vlans_device_df.index[0]])
+    #print('index you are deleting is:')
+    #print(min_vlans_device_df.index[0])
+    vlans_df_primary_port_used=vlans_df_primary_port_used.drop(vlans_df_primary_port_used.index[min_vlans_device_df.index[0]])
+    vlans_df_primary_port_used = vlans_df_primary_port_used.reset_index(drop=True)
+    #print(len(vlans_df_primary_port))
+    del min_vlans_df
+    del min_vlans_device_df
+    print(json_non_redundant_df[i])
 #non_redundant_df['device_id']=''
 #non_redundant_df['primary_port']=''
 #non_redundant_df['vlan_id']=''

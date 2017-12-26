@@ -9,19 +9,56 @@ import os
 import pandas as pd
 import datetime
 import json
+import unittest
 
-current_directory=str(os.getcwd())
-requests_df=pd.read_csv(current_directory+"\\requests.csv")
+def add(x,y):
+    return x+y
+
+def load_file(file_name):
+    current_directory=str(os.getcwd())
+    loaded_df=pd.read_csv(current_directory+"\\"+file_name)
+    return loaded_df 
+
+def vlans_df_primary_port_sorter(file_name, port_ind):
+    vlans_df=load_file(file_name)
+    vlans_df_primary_port=vlans_df.loc[vlans_df['primary_port'] == port_ind].reset_index(drop=True).reset_index(drop=True)
+    return vlans_df_primary_port
+    if port_ind==1:
+        print("vlans dataframe primary port is: \n")
+        print(vlans_df_primary_port.head(10))
+    elif port_ind==0:
+        print("vlans dataframe non primary port is: \n")
+        print(vlans_df_primary_port.head(10))
+    
+def redundant_df_loader_sorter(file_name, redund_ind):
+    requests_df=load_file(file_name)
+    print("requests dataframe is: \n")
+    print(requests_df.head(10))
+    redundant_df= requests_df.loc[requests_df['redundant'] == redund_ind].sort_values('request_id',ascending=True).reset_index(drop=True)
+    return redundant_df
+    if redund_ind==1:
+        print("redundant dataframe is: \n")            
+        print(redundant_df.head(10))
+    elif redund_ind==0:
+        print("non redundant dataframe is: \n")            
+        print(redundant_df.head(10))
+        
+    
+
+#current_directory=str(os.getcwd())
+#requests_df=request_df_loader"test_requests.csv")
+'''
 print("requests dataframe is: \n")
 print(requests_df.head(10))
 
-vlans_df=pd.read_csv(current_directory+"\\vlans.csv")
+vlans_df=pd.read_csv(current_directory+"\\test_vlans.csv")
 vlans_df_primary_port=vlans_df.loc[vlans_df['primary_port'] == 1]
 vlans_df_non_primary_port=vlans_df.loc[vlans_df['primary_port'] == 0]
 print("vlans dataframe primary port is: \n")
 print(vlans_df_primary_port.head(10))
 print("vlans dataframe non primary port is: \n")
 print(vlans_df_non_primary_port.head(10))
+
 
 redundant_df= requests_df.loc[requests_df['redundant'] == 1].sort_values('request_id',ascending=True)
 non_redundant_df= requests_df.loc[requests_df['redundant'] == 0].sort_values('request_id',ascending=True)
@@ -38,6 +75,13 @@ vlans_df_primary_port = vlans_df_primary_port.reset_index(drop=True)
 vlans_df_primary_port_used = vlans_df_primary_port
 vlans_df_non_primary_port = vlans_df_non_primary_port.reset_index(drop=True)
 #vlans_df_primary_port.to_csv("vlans_df_primary_port.csv")
+
+'''
+redundant_df=redundant_df_loader_sorter('test_requests.csv',1)
+non_redundant_df=redundant_df_loader_sorter('test_requests.csv',0)
+vlans_df_primary_port=vlans_df_primary_port_sorter('test_vlans.csv',1)
+vlans_df_primary_port_used=vlans_df_primary_port_sorter('test_vlans.csv',1)
+vlans_df_non_primary_port=vlans_df_primary_port_sorter('test_vlans.csv',0)
 
 json_non_redundant_df=json.loads(non_redundant_df.to_json(orient='records'))
 json_redundant_df=json.loads(redundant_df.to_json(orient='records'))
@@ -128,7 +172,7 @@ print(final_non_redundant_df.head(10))
 
 final_output_df=final_redundant_df.append(final_non_redundant_df, ignore_index=True).sort_values('primary_port',ascending=True).sort_values('request_id',ascending=True).reset_index(drop=True).drop(['redundant'], axis=1)[['request_id','device_id','primary_port','vlan_id']]
 print(final_output_df.head(10))
-final_output_df.to_csv("final_output.csv", index = False)
+final_output_df.to_csv("test_final_output.csv", index = False)
 #non_redundant_df['device_id']=''
 #non_redundant_df['primary_port']=''
 #non_redundant_df['vlan_id']=''

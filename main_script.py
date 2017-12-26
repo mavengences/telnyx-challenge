@@ -11,11 +11,11 @@ import datetime
 import json
 
 current_directory=str(os.getcwd())
-requests_df=pd.read_csv(current_directory+"\\test_requests.csv")
+requests_df=pd.read_csv(current_directory+"\\requests.csv")
 print("requests dataframe is: \n")
 print(requests_df.head(10))
 
-vlans_df=pd.read_csv(current_directory+"\\test_vlans.csv")
+vlans_df=pd.read_csv(current_directory+"\\vlans.csv")
 vlans_df_primary_port=vlans_df.loc[vlans_df['primary_port'] == 1]
 vlans_df_non_primary_port=vlans_df.loc[vlans_df['primary_port'] == 0]
 print("vlans dataframe primary port is: \n")

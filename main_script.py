@@ -41,11 +41,11 @@ def redundant_df_loader_sorter(file_name, redund_ind):
         print("non redundant dataframe is: \n")            
         print(redundant_df.head(10))
         
-redundant_df=redundant_df_loader_sorter('requests.csv',1)
-non_redundant_df=redundant_df_loader_sorter('requests.csv',0)
-vlans_df_primary_port=vlans_df_primary_port_sorter('vlans.csv',1)
-vlans_df_primary_port_used=vlans_df_primary_port_sorter('vlans.csv',1)
-vlans_df_non_primary_port=vlans_df_primary_port_sorter('vlans.csv',0)
+redundant_df=redundant_df_loader_sorter('test_requests.csv',1)
+non_redundant_df=redundant_df_loader_sorter('test_requests.csv',0)
+vlans_df_primary_port=vlans_df_primary_port_sorter('test_vlans.csv',1)
+vlans_df_primary_port_used=vlans_df_primary_port_sorter('test_vlans.csv',1)
+vlans_df_non_primary_port=vlans_df_primary_port_sorter('test_vlans.csv',0)
 
 #for i in range(0,10):
 json_redundant_df=json.loads(redundant_df.to_json(orient='records'))
@@ -163,7 +163,7 @@ final_non_redundant_df=final_non_redundant_df_list[3]
 
 final_output_df=final_redundant_df.append(final_non_redundant_df, ignore_index=True).sort_values('primary_port',ascending=True).sort_values('request_id',ascending=True).reset_index(drop=True).drop(['redundant'], axis=1)[['request_id','device_id','primary_port','vlan_id']]
 print(final_output_df.head(10))
-final_output_df.to_csv("final_output.csv", index = False)
+final_output_df.to_csv("test_final_output.csv", index = False)
 #non_redundant_df['device_id']=''
 #non_redundant_df['primary_port']=''
 #non_redundant_df['vlan_id']=''

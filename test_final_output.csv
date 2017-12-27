@@ -5,5 +5,5 @@ request_id,device_id,primary_port,vlan_id
 2,0,0,2
 2,0,1,2
 3,2,1,4
-4,0,0,5
-4,0,1,5
+4,1,0,5
+4,1,1,5

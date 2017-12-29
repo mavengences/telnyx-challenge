@@ -44,7 +44,7 @@ vlans_df_primary_port_used=final_output_redundant_parser_list[1]
 vlans_df_non_primary_port=final_output_redundant_parser_list[2]
 final_redundant_df=final_output_redundant_parser_list[3]
 
-# This code parses the non redundant requests by calling functions in "main_script_functions.py" and assigning output to values	
+# This code takes in arguments from above and parses the non redundant requests by calling functions in "main_script_functions.py" and assigning output to values	
 final_non_redundant_df_list=main_script_functions.non_redundant_df_parser(json_non_redundant_df, vlans_df_primary_port, vlans_df_primary_port_used, vlans_df_non_primary_port)
 vlans_df_primary_port=final_non_redundant_df_list[0]
 vlans_df_primary_port_used=final_non_redundant_df_list[1]

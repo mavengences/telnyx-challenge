@@ -53,5 +53,8 @@ final_non_redundant_df=final_non_redundant_df_list[3]
 
 # these commands will format the final output dataframe to match the requirements in the pdf and write the final df to a csv file. 
 final_output_df=final_redundant_df.append(final_non_redundant_df, ignore_index=True).sort_values(['request_id', 'primary_port', 'device_id'], ascending=[True, True, True]).reset_index(drop=True).drop(['redundant'], axis=1)[['request_id','device_id','primary_port','vlan_id']]
-print(final_output_df.head(10))
 final_output_df.to_csv(final_output_string_to_write_to, index = False)
+print("All Finished Script Executed Successfully")
+print("Final output has : "+str(len(final_output_df))+" records")
+print("Sample 10 records can be seen below:")
+print(final_output_df.head(10))
